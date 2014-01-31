@@ -52,6 +52,10 @@ static float progress = 0.0f;
     }
 }
 
+- (IBAction)showImageWithStatus:(id)sender {
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:15.f]};
+    [SVProgressHUD showImage:[UIImage imageNamed:@"SVProgressHUD.bundle/success.png"] status:[[NSAttributedString alloc] initWithString:@"Power tip!\n\nShare past moments with the throwback button" attributes:attributes] duration:10.f];
+}
 
 #pragma mark -
 #pragma mark Dismiss Methods Sample

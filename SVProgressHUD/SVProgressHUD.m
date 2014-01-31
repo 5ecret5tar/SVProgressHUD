@@ -35,7 +35,7 @@ CGFloat SVProgressHUDRingThickness = 6;
             maskType:(SVProgressHUDMaskType)hudMaskType;
 
 - (void)showImage:(UIImage*)image
-           status:(NSString*)status
+           status:(NSAttributedString*)status
          duration:(NSTimeInterval)duration;
 
 - (void)dismiss;
@@ -110,16 +110,20 @@ CGFloat SVProgressHUDRingThickness = 6;
 
 #pragma mark - Show then dismiss methods
 
-+ (void)showSuccessWithStatus:(NSString *)string {
++ (void)showSuccessWithStatus:(NSAttributedString *)string {
     [SVProgressHUD showImage:[UIImage imageNamed:@"SVProgressHUD.bundle/success.png"] status:string];
 }
 
-+ (void)showErrorWithStatus:(NSString *)string {
++ (void)showErrorWithStatus:(NSAttributedString *)string {
     [SVProgressHUD showImage:[UIImage imageNamed:@"SVProgressHUD.bundle/error.png"] status:string];
 }
 
-+ (void)showImage:(UIImage *)image status:(NSString *)string {
-    [[SVProgressHUD sharedView] showImage:image status:string duration:1.0];
++ (void)showImage:(UIImage *)image status:(NSAttributedString *)string {
+    [SVProgressHUD showImage:image status:string duration:1.0];
+}
+
++ (void)showImage:(UIImage *)image status:(NSAttributedString *)status duration:(NSTimeInterval)duration {
+    [[SVProgressHUD sharedView] showImage:image status:status duration:duration];
 }
 
 
@@ -195,14 +199,14 @@ CGFloat SVProgressHUDRingThickness = 6;
         stringWidth = stringSize.width;
         stringHeight = stringSize.height;
         if (imageUsed)
-            hudHeight = 80+stringHeight;
+            hudHeight = 110+stringHeight;
         else
             hudHeight = 20+stringHeight;
         
         if(stringWidth > hudWidth)
             hudWidth = ceil(stringWidth/2)*2;
         
-        CGFloat labelRectY = imageUsed ? 66 : 9;
+        CGFloat labelRectY = imageUsed ? 86 : 9;
         
         if(hudHeight > 100) {
             labelRect = CGRectMake(12, labelRectY, hudWidth, stringHeight);
@@ -216,7 +220,7 @@ CGFloat SVProgressHUDRingThickness = 6;
 	self.hudView.bounds = CGRectMake(0, 0, hudWidth, hudHeight);
 	
     if(string)
-        self.imageView.center = CGPointMake(CGRectGetWidth(self.hudView.bounds)/2, 36);
+        self.imageView.center = CGPointMake(CGRectGetWidth(self.hudView.bounds)/2, 50);
 	else
        	self.imageView.center = CGPointMake(CGRectGetWidth(self.hudView.bounds)/2, CGRectGetHeight(self.hudView.bounds)/2);
 	
@@ -429,7 +433,7 @@ CGFloat SVProgressHUDRingThickness = 6;
 }
 
 
-- (void)showImage:(UIImage *)image status:(NSString *)string duration:(NSTimeInterval)duration {
+- (void)showImage:(UIImage *)image status:(NSAttributedString *)attributedString duration:(NSTimeInterval)duration {
     self.progress = -1;
     [self cancelRingLayerAnimation];
     
@@ -438,7 +442,7 @@ CGFloat SVProgressHUDRingThickness = 6;
     
     self.imageView.image = image;
     self.imageView.hidden = NO;
-    self.stringLabel.text = string;
+    self.stringLabel.attributedText = attributedString;
     [self updatePosition];
     [self.spinnerView stopAnimating];
     
@@ -632,7 +636,7 @@ CGFloat SVProgressHUDRingThickness = 6;
 
 - (UIImageView *)imageView {
     if (imageView == nil)
-        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 28, 28)];
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     
     if(!imageView.superview)
         [self.hudView addSubview:imageView];
