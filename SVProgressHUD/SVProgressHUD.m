@@ -35,7 +35,7 @@ CGFloat SVProgressHUDRingThickness = 6;
             maskType:(SVProgressHUDMaskType)hudMaskType;
 
 - (void)showImage:(UIImage*)image
-           status:(NSAttributedString*)status
+           status:(id)status
          duration:(NSTimeInterval)duration;
 
 - (void)dismiss;
@@ -110,19 +110,19 @@ CGFloat SVProgressHUDRingThickness = 6;
 
 #pragma mark - Show then dismiss methods
 
-+ (void)showSuccessWithStatus:(NSAttributedString *)string {
++ (void)showSuccessWithStatus:(id)string {
     [SVProgressHUD showImage:[UIImage imageNamed:@"SVProgressHUD.bundle/success.png"] status:string];
 }
 
-+ (void)showErrorWithStatus:(NSAttributedString *)string {
++ (void)showErrorWithStatus:(id)string {
     [SVProgressHUD showImage:[UIImage imageNamed:@"SVProgressHUD.bundle/error.png"] status:string];
 }
 
-+ (void)showImage:(UIImage *)image status:(NSAttributedString *)string {
++ (void)showImage:(UIImage *)image status:(id)string {
     [SVProgressHUD showImage:image status:string duration:1.0];
 }
 
-+ (void)showImage:(UIImage *)image status:(NSAttributedString *)status duration:(NSTimeInterval)duration {
++ (void)showImage:(UIImage *)image status:(id)status duration:(NSTimeInterval)duration {
     [[SVProgressHUD sharedView] showImage:image status:status duration:duration];
 }
 
@@ -433,7 +433,7 @@ CGFloat SVProgressHUDRingThickness = 6;
 }
 
 
-- (void)showImage:(UIImage *)image status:(NSAttributedString *)attributedString duration:(NSTimeInterval)duration {
+- (void)showImage:(UIImage *)image status:(id)string duration:(NSTimeInterval)duration {
     self.progress = -1;
     [self cancelRingLayerAnimation];
     
@@ -442,7 +442,11 @@ CGFloat SVProgressHUDRingThickness = 6;
     
     self.imageView.image = image;
     self.imageView.hidden = NO;
-    self.stringLabel.attributedText = attributedString;
+    if ([string isKindOfClass:[NSAttributedString class]]) {
+        self.stringLabel.attributedText = string;
+    } else {
+        self.stringLabel.text = string;
+    }
     [self updatePosition];
     [self.spinnerView stopAnimating];
     
