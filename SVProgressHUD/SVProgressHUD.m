@@ -440,6 +440,9 @@ CGFloat SVProgressHUDRingThickness = 6;
     if(![SVProgressHUD isVisible])
         [SVProgressHUD show];
     
+    self.maskType = SVProgressHUDMaskTypeClear;
+    self.overlayWindow.userInteractionEnabled = YES;
+    
     self.imageView.image = image;
     self.imageView.hidden = NO;
     if ([string isKindOfClass:[NSAttributedString class]]) {
